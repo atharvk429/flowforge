@@ -143,6 +143,20 @@ class DagValidatorTest {
     }
 
     @Test
+    void rejectsBothMissingDependencyEndpoints() {
+        DagValidationResult result = validator.validate(workflow(
+                List.of(task("A")),
+                List.of(edge("missing1", "missing2"))
+        ));
+
+        assertThat(result.valid()).isFalse();
+        assertThat(result.errors()).containsExactly(
+                "Dependency source 'missing1' does not match a task.",
+                "Dependency target 'missing2' does not match a task."
+        );
+    }
+
+    @Test
     void rejectsSelfLoopAndDuplicateDependency() {
         DagValidationResult result = validator.validate(workflow(
                 List.of(task("A"), task("B")),

@@ -108,14 +108,21 @@ public class DagValidator {
                 continue;
             }
 
-            if (!adjacencyList.containsKey(from)) {
+            boolean sourceExists = adjacencyList.containsKey(from);
+            boolean targetExists = adjacencyList.containsKey(to);
+
+            if (!sourceExists) {
                 errors.add("Dependency source '" + from + "' does not match a task.");
             }
-            if (!adjacencyList.containsKey(to)) {
+            if (!targetExists) {
                 errors.add("Dependency target '" + to + "' does not match a task.");
             }
             if (from.equals(to)) {
                 errors.add("Task '" + from + "' cannot depend on itself.");
+            }
+
+            if (!sourceExists || !targetExists || from.equals(to)) {
+                continue;
             }
 
             Edge edge = new Edge(from, to);
@@ -124,10 +131,8 @@ public class DagValidator {
                 continue;
             }
 
-            if (adjacencyList.containsKey(from) && adjacencyList.containsKey(to) && !from.equals(to)) {
-                adjacencyList.get(from).add(to);
-                indegree.compute(to, (key, value) -> value + 1);
-            }
+            adjacencyList.get(from).add(to);
+            indegree.compute(to, (key, value) -> value + 1);
         }
     }
 
