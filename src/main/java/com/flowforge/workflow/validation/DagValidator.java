@@ -4,6 +4,7 @@ import com.flowforge.workflow.dto.DependencyRequest;
 import com.flowforge.workflow.dto.TaskDefinitionRequest;
 import com.flowforge.workflow.dto.WorkflowDefinitionRequest;
 import com.flowforge.workflow.model.DagValidationResult;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.Set;
  * Validates a workflow's dependency graph and produces a deterministic
  * topological order using Kahn's algorithm.
  */
+@Component
 public class DagValidator {
 
     public DagValidationResult validate(WorkflowDefinitionRequest workflow) {
